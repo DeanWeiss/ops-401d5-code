@@ -10,26 +10,32 @@ import datetime
 import time
 import os
 
-hostip = "8.8.8.8"
-response = os.system("ping -c 1 " + hostip)
+# Variable of Host IP
+hostip = "192.168.0.8"
+# variable for pinging the host IP
+pingip = (os.system("ping -c 1 " + hostip))
+# now is a variable for the datetime command
+now = datetime.datetime.now()
 
+# Create Infinite Loop
 while True:
-    # now is a variable for the datetime command
-    now = datetime.datetime.now()
+    if pingip == 0:
+        connection = "Is Up."
+    else:
+        connection ="Is Down."
+
     # printing to the screen
     print("Current date and time: ")
     # print string calling the now variable
-    print(str(now))
+    print(str(now), connection, hostip)
 
     # Printing the start time 
     print("Start : %s" % time.ctime())
     print ("End : %s" % time.ctime())
+
+    # 2 Seconds between Pings
     time.sleep(2)
-    print(os.system("ping -c 1 " + hostip))
-    if response == 0:
-        print (hostip, "Is Up.")
-    else:
-        print (hostip, "Is Down.")
+
     
 
 # I went here: https://stackoverflow.com/questions/2953462/pinging-servers-in-python
