@@ -6,7 +6,6 @@
 # Purpose: File Encryption Script Part 1 of 3
 
 # Import Fernet
-from email import message
 from cryptography.fernet import Fernet
 
 # Declare Variables
@@ -24,17 +23,22 @@ def menu():
                     Please Enter Your Choice: """)
     if option == '1':
         filepath = input("File to be Encrypted: ")
+        encrypt_file(filepath)
         
     elif option == '2':
         filepath = input("File to be Decrypted: ")
+        decrypt_file(filepath)
 
     elif option == '3':
         message = input("Message to be Encrypted: ")
+        encrypt_message(message.encode())
 
     elif option == '4':
         message = input("Message to be Decrypted: ")
+        decrypt_message(message.encode())
     
     else: print ("Please select a number 1 thru 4.")
+
 
 # Function to Generate Key
 def write_key():
@@ -47,10 +51,37 @@ def load_key():
     return open("key.key", "rb").read()
 
 # Encrypt a File
-def encrypt_file(file):
-    
+def encrypt_file(filepath):
+    write_key()
+    key = load_key()
+    fkey = Fernet(key)
+    with open(filepath, 'rb') as f:
+        contents = f.read()
+        print(contents)
+        f.close()
+    encrypted = fkey.encrypt(contents)
+    with open(filepath, 'wb') as f:
+        f.write(encrypted)
+        f.close()
+    print("Ciphertext is " +str(encrypted.decode('utf-8')))
+
+# Decrypt a File
+def decrypt_file(filepath):
+    key = load_key()
+    fkey = Fernet(key)
+    with open(filepath, 'rb') as f:
+        contents = f.read()
+        print(contents)
+        f.close()
+    decrypted = fkey.decrypt(contents)
+    with open(filepath, 'wb') as f:
+        f.write(decrypted)
+        f.close()
+    print("Decrypted message " + str(decrypted.decode('utf-8')))
+
 # Encrypt the Message
 def encrypt_message(message):
+    write_key()
     key = load_key()
     f = Fernet(key)
     encrypted = f.encrypt(message)
