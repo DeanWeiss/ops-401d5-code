@@ -2,27 +2,27 @@
 
 # Script: Ops 401d5 Challenge 11
 # Author: Dean Weiss
-# Date of Last Revision: 17 Oct 2022
-# Purpose: TCP Port Range Scanner that tests whether a TCP port is open or closed.
+# Date of Last Revision: 20 Oct 2022
+# Purpose: TCP Port Range Scanner that tests whether a TCP port is open or closed. Part 1 of 3
 # Importing Libraries
-from scapy.all import sr1,IP,ICMP,TCP
+import random
+from sys import flags
+from scapy.all import sr1, sr, IP, ICMP, TCP
 
-# Variables
-# IP Address of a Windows VM I booted up.
-host = "192.168.0.13"
-port_range = [22, 23, 80, 443, 3389]
-src_port = [22]
-dst_port = [22, 23, 80, 443, 3380]
+host = "192.168.0.130" 
+# sport, scan port range...yeah, sport
+sport = (20, 21, 22, 80)
+src_port = 22
+for port in sport:
+    response=sr1(IP(dst=host)/TCP(sport=src_port,dport=port,flags="S"),timeout=1,verbose=0,) 
 
-response = sr1(IP(dst=host)/TCP(sport=src_port, dport=dst_port, flags="S"), timeout=1, verbose=0)
+    if response is not None and response.haslayer(TCP) and response.getlayer(TCP).flags==0x12:
+        print(str(sport) +": Port is open")
+    if response is not None and response.haslayer(TCP) and response.getlayer(TCP).flags==0x14:
+        print(str(sport) +": Port is closed")
+    else:
+        print(str(port) +" Port is filtered and silently dropped")
 
 
-# For Loop
-for x in port_range:
-    response
-    if (str(response)) == "0x12":
-        print ("Port is Open.")
-    elif (str(response)) == "0x14":
-        print ("Port is Closed")
-    elif (str(response)) == "None":
-        print ("Port is filtered and silently dropped")
+
+# Source: I had a real hard time with labs 11-13 and Zack helped me and shared with me his source. https://thepacketgeek.com/scapy/building-network-tools/part-10/
