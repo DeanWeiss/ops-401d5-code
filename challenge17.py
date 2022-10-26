@@ -3,8 +3,9 @@
 # Script: Ops 401d5 Challenge 16
 # Author: Dean Weiss
 # Date of Last Revision: 24 Oct 2022
-# Purpose: Brute Force 1 of 3
+# Purpose: Brute Force 2 of 3
 # Improt Libraries
+from pexpect import pxssh
 import os
 import time
 import getpass
@@ -59,12 +60,28 @@ def password_check():
             print ("No Matching Password.")
     file.close()
 
-    # Ask the user for input in the form of a password or string
-    # Ask the user for the file path
-    # Iterate over each word in the wordlist
-    # Check if the user provided password is in the wordlist
-    # Print out a message saying the password was found in the wordlist
-        # Look into enumerator and readline vs readlines
+
+session = pxssh.pxssh()
+host = input("Please provide an IP address:")
+username = input("Please provide a username:")
+pwd = getpass.getpass(prompt = "Enter a Password:")
+
+try:
+    session.login(host, username, pwd)
+    session.sendline('uptime')
+    session.prompt()
+    print(session.before)
+    session.sendline('whoami')
+    session.prompt()
+    print(session.before)
+    session.sendline('ls-l')
+    session.prompt()
+    print(session.before)
+    session.logout()
+
+except pxssh.ExceptionPxssh as e:
+    print("pxssh failed on login.")
+    print(e)
 
 # Calling the menu function
 menu()
