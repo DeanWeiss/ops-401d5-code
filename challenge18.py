@@ -2,8 +2,8 @@
 
 # Script: Ops 401d5 Challenge 16
 # Author: Dean Weiss
-# Date of Last Revision: 25 Oct 2022
-# Purpose: Brute Force 2 of 3
+# Date of Last Revision: 26 Oct 2022
+# Purpose: Brute Force 3 of 3
 # Improt Libraries
 from pexpect import pxssh
 import os
