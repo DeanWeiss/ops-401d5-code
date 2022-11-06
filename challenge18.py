@@ -60,6 +60,19 @@ def password_check():
             print ("No Matching Password.")
     file.close()
 
+def ssh_connect(password, code = 0):
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy()) 
+    try:
+        ssh.connect(host, port=22, username=username, password=password)
+    except paramiko.AuthenticationException:
+        code = 1
+    except OSError as e:
+        code = 2
+    ssh.close()
+    return code 
+
+
 
 session = pxssh.pxssh()
 host = input("Please provide an IP address:")
