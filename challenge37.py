@@ -45,3 +45,5 @@ with open("httpresp.html", "w", encoding='utf-8') as file:
 #
 # Stretch Goal
 # - Give Cookie Monster hands
+
+# Source: https://stackoverflow.com/questions/40529848/how-to-write-the-output-to-html-file-with-python-beautifulsoup
